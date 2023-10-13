@@ -1,3 +1,4 @@
 import 'dotenv/config';
+import log from './utils/logger.util';
 
-console.log(process.env.MONGO_URI);
+log.info('Hello World!');
