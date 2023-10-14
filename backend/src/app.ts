@@ -7,6 +7,8 @@ import changeEmitter, { EEvents } from './events/change_emitter';
 import { IChange } from './models/change.model';
 import EmailNotifier from './notifiers/email_notifier';
 import SMSNotifier from './notifiers/sms_notifier';
+import Track from './jobs/track';
+import { addWebsites } from './utils/helpers.util';
 
 // ================================================================================================================
 
@@ -27,25 +29,14 @@ changeEmitter.on(EEvents.CHANGE, async (change: IChange) => {
 });
 
 // ================================================================================================================
+// Job to keep track of website changes
+const track = new Track();
+track.start();
 
-app.get('/check', async (req: Request, res: Response) => {
-    const url = 'http://www.google.com/';
-    let website = await Website.findOne({
-        address: url,
-    });
-    if (!website) {
-        website = await Website.create({
-            address: url,
-        });
-    }
+// ================================================================================================================
 
-    // ------------------------------------------------------
-    const change = await website.getChange();
-    // ------------------------------------------------------
-
-
-
-    return res.status(200).send(change);
+app.get('/check', (req: Request, res: Response) => {
+    return res.status(200).send('OK!');
 });
 
 // ================================================================================================================
@@ -53,6 +44,8 @@ app.get('/check', async (req: Request, res: Response) => {
 app.listen(port, async () => {
     // Connect to database
     await connect();
+
+    await addWebsites();
 
     log.info(`App Running on port ${port}!`);
 });
