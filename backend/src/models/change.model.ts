@@ -2,6 +2,7 @@ import mongoose, { Schema, Document, Model, CallbackWithoutResultAndOptionalErro
 import State, { EStateFields } from './state.model';
 import log from '../utils/logger.util';
 import Website from './website.model';
+import changeEmitter, { EEvents } from '../events/change_emitter';
 
 // ===================================================================================================
 // Create a TypeScript type for the model
@@ -40,10 +41,10 @@ const changeSchema = new Schema<IChange, ChangeModel, {}>({
 // Called when a new Change is being saved
 
 changeSchema.pre<IChange>('save', {document: true}, async function(this: IChange, next: CallbackWithoutResultAndOptionalError, options: SaveOptions) {
-    // const currentState = await State.findOne({ _id: this.currentState });
-    // const website = await Website.findOne({ _id: currentState?.website });
-    // log.info(`New Change on (${website?.address}) on Fields: ${this.fields.join(', ')}`);
-    log.info(this);
+    
+    // Emit a new Change event
+    changeEmitter.emit(EEvents.CHANGE, this);
+    
     return next();
 });
 // ===================================================================================================
