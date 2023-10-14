@@ -74,6 +74,7 @@ websiteSchema.method<IWebsite>('getChange', async function(this: IWebsite) {
         });
 
         const change = await Change.create({
+            website: this._id,
             currentState: currentState._id,
             previousState: previousState._id,
             fields: changed,

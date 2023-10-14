@@ -9,6 +9,9 @@ import EmailNotifier from './notifiers/email_notifier';
 import SMSNotifier from './notifiers/sms_notifier';
 import Track from './jobs/track';
 import { addWebsites } from './utils/helpers.util';
+import { changeRouter } from './routers/change.router';
+import { stateRouter } from './routers/state.router';
+import { websiteRouter } from './routers/website.router';
 
 // ================================================================================================================
 
@@ -38,6 +41,14 @@ track.start();
 app.get('/check', (req: Request, res: Response) => {
     return res.status(200).send('OK!');
 });
+
+// ================================================================================================================
+
+app.use('/websites', websiteRouter);
+
+app.use('/states', stateRouter);
+
+app.use('/changes', changeRouter);
 
 // ================================================================================================================
 

@@ -8,6 +8,7 @@ import changeEmitter, { EEvents } from '../events/change_emitter';
 // Create a TypeScript type for the model
 
 export interface IChange extends Document {
+    website: Schema.Types.ObjectId,
     previousState: Schema.Types.ObjectId,
     currentState: Schema.Types.ObjectId,
     fields: EStateFields[],
@@ -20,6 +21,10 @@ type ChangeModel = Model<IChange, {}, {}>;
 // ===================================================================================================
 // Schema (MongoDB)
 const changeSchema = new Schema<IChange, ChangeModel, {}>({
+    website: {
+        type: Schema.Types.ObjectId,
+        ref: 'Website',
+    },
     previousState: {
         type: Schema.Types.ObjectId,
         ref: 'State',
