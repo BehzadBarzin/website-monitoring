@@ -6,6 +6,7 @@ import Website from './models/website.model';
 import changeEmitter, { EEvents } from './events/change_emitter';
 import { IChange } from './models/change.model';
 import EmailNotifier from './notifiers/email_notifier';
+import SMSNotifier from './notifiers/sms_notifier';
 
 // ================================================================================================================
 
@@ -18,9 +19,11 @@ app.use(json());
 // ================================================================================================================
 
 const emailNotifier = new EmailNotifier();
+const smsNotifier = new SMSNotifier();
 
 changeEmitter.on(EEvents.CHANGE, async (change: IChange) => {
     await emailNotifier.send(change);
+    await smsNotifier.send(change);
 });
 
 // ================================================================================================================
