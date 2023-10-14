@@ -12,6 +12,10 @@ import { addWebsites } from './utils/helpers.util';
 import { changeRouter } from './routers/change.router';
 import { stateRouter } from './routers/state.router';
 import { websiteRouter } from './routers/website.router';
+import { userRouter } from './routers/user.router';
+import { sessionRouter } from './routers/session.router';
+import { deserializeUser } from './middleware/deserializeUser';
+import cors from 'cors';
 
 // ================================================================================================================
 
@@ -21,6 +25,9 @@ const app = express();
 
 app.use(json());
 
+app.use(cors({
+    origin: '*',
+}));
 // ================================================================================================================
 
 const emailNotifier = new EmailNotifier();
@@ -43,12 +50,19 @@ app.get('/check', (req: Request, res: Response) => {
 });
 
 // ================================================================================================================
+// Call our custom middleware on every route
+app.use(deserializeUser);
+// ================================================================================================================
 
 app.use('/websites', websiteRouter);
 
 app.use('/states', stateRouter);
 
 app.use('/changes', changeRouter);
+
+app.use('/users', userRouter);
+
+app.use('/sessions', sessionRouter);
 
 // ================================================================================================================
 

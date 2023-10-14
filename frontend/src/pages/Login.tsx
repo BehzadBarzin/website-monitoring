@@ -11,7 +11,7 @@ type FormState = {
   name?: string,
   email?: string,
   password?: string,
-  password_confirmation?: string
+  passwordConfirmation?: string
 };
 
 
@@ -52,7 +52,7 @@ function Login() {
     // If in login mode
     if (!isRegister) {
       // make http request to backend to login
-      const res = await axios.post(`${API_URL}/login`, {
+      const res = await axios.post(`${API_URL}/sessions`, {
         email: formState.email,
         password: formState.password
       }, {
@@ -64,7 +64,8 @@ function Login() {
 
       // Sign in the user with the 'react-auth-kit' package
       signIn({
-        token: res.data.token,
+        token: res.data.accessToken,
+        refreshToken: res.data.refreshToken,
         tokenType: 'Bearer',
         expiresIn: 7 * 24 * 60 * 60,
         authState: res.data.user
@@ -77,11 +78,11 @@ function Login() {
       // If in register mode
       
       // make http request to backend to register the new user
-      const res = await axios.post(`${API_URL}/register`, {
+      const res = await axios.post(`${API_URL}/users`, {
         name: formState.name,
         email: formState.email,
         password: formState.password,
-        password_confirmation: formState.password_confirmation
+        passwordConfirmation: formState.passwordConfirmation
       }, {
         headers: {
           'Accept': 'application/json',
@@ -89,9 +90,11 @@ function Login() {
         }
       });
 
+
       // Sign in the user with the 'react-auth-kit' package
       signIn({
-        token: res.data.token,
+        token: res.data.accessToken,
+        refreshToken: res.data.refreshToken,
         tokenType: 'Bearer',
         expiresIn: 7 * 24 * 60 * 60,
         authState: res.data.user
@@ -155,8 +158,8 @@ function Login() {
               isRegister ?
                       (
                         <div className="mb-6">
-                            <label htmlFor="confirm_password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Confirm password</label>
-                            <input type="password" id="confirm_password" name="password_confirmation" onChange={onFormChange} value={formState.password_confirmation} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="•••••••••" required />
+                            <label htmlFor="passwordConfirmation" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Confirm password</label>
+                            <input type="password" id="passwordConfirmation" name="passwordConfirmation" onChange={onFormChange} value={formState.passwordConfirmation} className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="•••••••••" required />
                         </div>
                       ) : null
             }
