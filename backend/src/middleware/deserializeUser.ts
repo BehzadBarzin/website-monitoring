@@ -2,6 +2,8 @@ import { get } from 'lodash';
 import { NextFunction, Request, Response } from 'express';
 import { verifyJWT } from '../utils/jwt.utils';
 import { reIssueAccessToken } from '../services/session.service';
+import log from '../utils/logger.util';
+import User, { IUser } from '../models/user.model';
 
 
 /**

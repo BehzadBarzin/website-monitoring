@@ -16,6 +16,7 @@ import { userRouter } from './routers/user.router';
 import { sessionRouter } from './routers/session.router';
 import { deserializeUser } from './middleware/deserializeUser';
 import cors from 'cors';
+import { watchListRouter } from './routers/watchlist.router';
 
 // ================================================================================================================
 
@@ -63,6 +64,8 @@ app.use('/changes', changeRouter);
 app.use('/users', userRouter);
 
 app.use('/sessions', sessionRouter);
+
+app.use('/watch-lists', watchListRouter);
 
 // ================================================================================================================
 

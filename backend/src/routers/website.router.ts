@@ -4,6 +4,16 @@ import { requireUser } from '../middleware/requireUser';
 
 export const websiteRouter = Router();
 
+websiteRouter.get('/', async (req: Request, res: Response) => {
+    try {
+        const websites = await Website.find().lean();
+        return res.send(websites);
+    } catch (error: any) {
+        res.status(500).send(error.message);
+    }
+});
+
+
 websiteRouter.get('/:id', async (req: Request<{id: string}>, res: Response) => {
     try {
         const website = await Website.findOne({
