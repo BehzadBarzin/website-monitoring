@@ -4,7 +4,7 @@ import Website from '../models/website.model';
 
 export default class Track {
 
-    private expression: string = '* * * * *'; // every minute
+    private expression: string = process.env.SCAN_CRON_EXPRESSION || '*/10 * * * *'; // every 10 minute
     private task: ScheduledTask | undefined;
 
     public start(): void {
