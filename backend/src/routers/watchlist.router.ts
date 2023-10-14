@@ -13,7 +13,7 @@ watchListRouter.get('/', requireUser, async (req: Request, res: Response) => {
         
         const user = await User.findById(res.locals.user._doc._id);
         if (!user) {
-            throw new Error('No such user!');
+            return res.status(500).send('No such user!');
         }
 
         let watchList = await WatchList.findOne({
@@ -39,7 +39,7 @@ watchListRouter.delete('/', requireUser, async (req: Request, res: Response) => 
         
         const user = await User.findById(res.locals.user._doc._id);
         if (!user) {
-            throw new Error('No such user!');
+            return res.status(500).send('No such user!');
         }
 
         let watchList = await WatchList.deleteOne({
@@ -64,12 +64,12 @@ watchListRouter.post('/', requireUser, async (req: Request<{}, {}, TBody>, res: 
         const user = await User.findById(res.locals.user._doc._id);
 
         if (!user) {
-            throw new Error('No such user!');
+            return res.status(500).send('No such user!');
         }
 
         const website = await Website.findById(req.body.website);
         if (!website) {
-            throw new Error('No such website!');
+            return res.status(500).send('No such website!');
         }
 
         let watchList = await WatchList.findOne({
@@ -90,7 +90,7 @@ watchListRouter.post('/', requireUser, async (req: Request<{}, {}, TBody>, res: 
         return res.send(watchList);
 
     } catch (error: any) {
-        res.status(500).send(error.message);
+        res.send(error.message);
     }
 
 });
@@ -100,12 +100,12 @@ watchListRouter.delete('/:id', requireUser, async (req: Request<{id: string}, {}
     try {
         const user = await User.findById(res.locals.user._doc._id);
         if (!user) {
-            throw new Error('No such user!');
+            return res.status(500).send('No such user!');
         }
 
         const website = await Website.findById(req.params.id);
         if (!website) {
-            throw new Error('No such website!');
+            return res.status(500).send('No such website!');
         }
 
         let watchList = await WatchList.findOne({
@@ -113,7 +113,7 @@ watchListRouter.delete('/:id', requireUser, async (req: Request<{id: string}, {}
         });
 
         if (!watchList) {
-            throw new Error('This user doesn\'t have a watch list');
+            return res.status(500).send('This user doesn\'t have a watch list');
         }
 
         watchList.websites = watchList.websites.filter(w => w !== website._id );
@@ -122,7 +122,7 @@ watchListRouter.delete('/:id', requireUser, async (req: Request<{id: string}, {}
 
         return res.send(watchList);
     } catch (error: any) {
-        res.status(500).send(error.message);
+        res.send(error.message);
     }
 });
 

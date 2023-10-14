@@ -15,7 +15,7 @@ type TBody = {
 sessionRouter.post('/', async (req: Request<{}, {}, TBody>, res: Response) => {
     try {
         if (!req.body.email || !req.body.password) {
-            throw new Error('Incomplete Body!');
+            return res.status(500).send('Incomplete Body!');
         }
 
         // Validate the user's password
@@ -35,7 +35,7 @@ sessionRouter.post('/', async (req: Request<{}, {}, TBody>, res: Response) => {
             refreshToken,
         });
     } catch (error: any) {
-        res.status(500).send(error.message);
+        res.send(error.message);
     }
 });
 
@@ -58,6 +58,6 @@ sessionRouter.delete('/', requireUser, async (req: Request, res: Response) => {
             refreshToken: null,
         });
     } catch (error: any) {
-        res.status(500).send(error.message);
+        res.send(error.message);
     }
 });

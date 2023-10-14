@@ -10,6 +10,6 @@ stateRouter.get('/:website', async (req: Request<{website: string}>, res: Respon
         }).lean();
         return res.send(states);
     } catch (error: any) {
-        res.status(500).send(error.message);
+        res.send(error.message);
     }
 });

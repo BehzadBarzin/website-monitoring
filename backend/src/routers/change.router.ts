@@ -10,6 +10,6 @@ changeRouter.get('/:website', async (req: Request<{website: string}>, res: Respo
         }).lean();
         return res.send(changes);
     } catch (error: any) {
-        res.status(500).send(error.message);
+        res.send(error.message);
     }
 });

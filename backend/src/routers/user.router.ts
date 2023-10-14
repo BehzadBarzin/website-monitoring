@@ -16,7 +16,7 @@ type TBody = {
 userRouter.post('/', async (req: Request<{}, {}, TBody>, res: Response) => {
     try {
         if (!req.body.name || !req.body.email || !req.body.password || !req.body.passwordConfirmation) {
-            throw new Error('Incomplete Body!');
+            return res.status(500).send('Incomplete Body!');
         }
 
         const user = await createUser(req.body);
@@ -30,6 +30,6 @@ userRouter.post('/', async (req: Request<{}, {}, TBody>, res: Response) => {
             refreshToken,
         });
     } catch (error: any) {
-        res.status(500).send(error.message);
+        res.send(error.message);
     }
 });

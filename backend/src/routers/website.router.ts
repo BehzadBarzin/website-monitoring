@@ -9,7 +9,7 @@ websiteRouter.get('/', async (req: Request, res: Response) => {
         const websites = await Website.find().lean();
         return res.send(websites);
     } catch (error: any) {
-        res.status(500).send(error.message);
+        res.send(error.message);
     }
 });
 
@@ -21,7 +21,7 @@ websiteRouter.get('/:id', async (req: Request<{id: string}>, res: Response) => {
         }).lean();
         return res.send(website);
     } catch (error: any) {
-        res.status(500).send(error.message);
+        res.send(error.message);
     }
 });
 
@@ -33,7 +33,7 @@ type TBody = {
 websiteRouter.post('/', requireUser, async (req: Request<{}, {}, TBody>, res: Response) => {
     try {
         if (!req.body.address) {
-            throw new Error('Must provide an address!');
+            return res.status(500).send('Must provide an address!');
         }
 
         const website = await Website.create({
@@ -42,6 +42,6 @@ websiteRouter.post('/', requireUser, async (req: Request<{}, {}, TBody>, res: Re
 
         return res.send(website);
     } catch (error: any) {
-        res.status(500).send(error.message);
+        res.send(error.message);
     }
 });
