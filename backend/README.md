@@ -14,11 +14,11 @@ The backend api of the Website Monitoring application.
     - Change keeps: `currentState`, `previousState`, `changedFields` (i.e. `content`, `loadTime`, `status`)
  - In the `pre-save` hook of the Change model, which is called before saving a new Change into database, a `change` event gets emitted using the `changeEmitter` object.
     - `changeEmitter` is an EventEmitter object that is responsible to inform listeners of a new Change being detected.
- - In the `app.ts` file, a listener has been added to the `changeEmitter` to detect any new Change being saved to database. This listener utilizes Notifier classes to send Notifications (SMS, Email) to users.
+ - In the `app.ts` file, a listener has been added to the `changeEmitter` to detect any new Change being saved to database. This listener utilizes Notifier classes to send Notifications (SMS, Email) to users who have the changed website in their WatchList.
 
  ### Extra
   - Each user can utilize the `POST /watch-lists` endpoint to add a Website to its WatchList.
-    - This WatchList can be later used by the Notifier classes to notify users of any change that occurred on any website that they have added to their WatchList.
+    - This WatchList is used by the Notifier classes to notify users of any change that occurred on any website that they have added to their WatchList.
 
 ## Environment Variables
 

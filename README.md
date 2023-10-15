@@ -18,9 +18,13 @@
 - ✅ User Management (User WatchList)
 - ✅ Change Detector
 - ✅ Display Changes
+### In Progress
+- ⚒️ Email Notifier (`./backend/src/notifiers/email_notifier.ts`)
+  - Prints the content of the email to the console
+    ![Alt text](image.png)
+  - Environment Variables must be set:
+    - `SENDGRID_API_KEY`: SendGrid API Key
+    - `FROM_EMAIL`: Sender Email Address
 ### Next Steps
 - ⏸️ Write Automated Tests
-- ⏸️ Connect Email Service to Email Notifier (`./backend/src/notifiers/email_notifier.ts`)
-  - For now, it just prints the content of the email to the console
-    ![Alt text](image.png)
 

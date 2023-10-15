@@ -5,18 +5,28 @@ import Website, { IWebsite } from '../models/website.model';
 import Notifier from './notifier';
 import log from '../utils/logger.util';
 
+const sgMail = require('@sendgrid/mail');
+import WatchList from '../models/watchlist.model';
+
+sgMail.setApiKey(process.env.SENDGRID_API_KEY || '');
+
+const fromEmail = process.env.FROM_EMAIL || '';
+
+
 export default class EmailNotifier implements Notifier<IChange> {
 
     private async getReceivers(website: IWebsite): Promise<string[]> {
         // Check the database for users watching a 'website'
-        // ...
+        const watchLists = await WatchList.find({
+            websites: {
+                '$in': [website._id]
+            }
+        }).populate('user');
 
-        // For now, we return a list of fake emails
-        return [
-            'john@email.com',
-            'mike@email.com',
-            'marry@email.com',
-        ];
+        // @ts-ignore
+        const receivers: string[] = watchLists.map((w) => w.user.email)
+
+        return receivers;
     }
 
     public async send(data: IChange): Promise<void> {
@@ -36,9 +46,26 @@ export default class EmailNotifier implements Notifier<IChange> {
 
         const receivers = await this.getReceivers(website);
         
-        log.info('----------------------------------');
-        log.info(`Sending Email To: ${receivers}`)
-        log.info(message);
-        log.info('----------------------------------');
+        // log.info('----------------------------------');
+        // log.info(`Sending Email To: ${receivers}`)
+        // log.info(message);
+        // log.info('----------------------------------');
+
+        receivers.forEach(async (rec) => {
+            const msg = {
+                to: rec,
+                from: fromEmail,
+                subject: `New Change: ${website.address}`,
+                text: message,
+                html: message,
+            };
+
+            try {
+                console.log(msg);
+                await sgMail.send(msg);
+            } catch (error) {
+                
+            }
+        });
     }
 }
